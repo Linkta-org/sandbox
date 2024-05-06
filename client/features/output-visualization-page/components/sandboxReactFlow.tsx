@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import ReactFlow, {
   MiniMap,
   Controls,
@@ -8,6 +8,8 @@ import ReactFlow, {
   Edge,
   useNodesState,
   useEdgesState,
+  Connection,
+  addEdge,
 
 } from 'reactflow';
 
@@ -67,6 +69,10 @@ const initialEdges: Edge[] = [
 export default function SandboxReactFlow() {
   const [ nodes, setNodes, onNodesChange ] = useNodesState(initialNodes);
   const [ edges, setEdges, onEdgesChange ] = useEdgesState(initialEdges);
+  const onConnect = useCallback((connection: Connection) => {
+    const edge = { ...connection, animated: true, id: `${edges.length} + 1`};
+    setEdges(previousEdges => addEdge(edge, previousEdges))
+  }, [])
 
   return (
     <div style={{ width: '1000px', height: '800px', border: '1px solid black' }}>
@@ -75,6 +81,7 @@ export default function SandboxReactFlow() {
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
+        onConnect={onConnect}
         fitView
       >
         <Controls />
