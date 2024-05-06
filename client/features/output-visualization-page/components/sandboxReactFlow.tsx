@@ -4,6 +4,10 @@ import ReactFlow, {
   Controls,
   Background,
   BackgroundVariant,
+  Node,
+  Edge,
+  useNodesState,
+  useEdgesState,
 
 } from 'reactflow';
 
@@ -11,8 +15,8 @@ import 'reactflow/dist/style.css';
 import './sandboxOverview.css';
 
 
-const graphNodes: any = [
-  { id: '1', position: { x: 0, y: 0 }, data: { label: '1' } },
+const initialNodes: Node[] = [
+  { id: '1', position: { x: 0, y: 0 }, data: { label: '1' }, draggable: true, dragging: true },
   { id: '2', position: { x: 0, y: 100 }, data: { label: '2' } },
   { id: '3', position: { x: 50, y: 200 }, data: { label: '3' } },
   { id: '4', position: { x: 150, y: 300 }, data: { label: '4' } },
@@ -20,6 +24,7 @@ const graphNodes: any = [
   { id: 'Z', position: { x: 700, y: 150 }, data: { label: 'Z' } },
   {
     id: '2-1',
+    data: {},
     type: 'group',
     position: {
       x: 250,
@@ -34,7 +39,7 @@ const graphNodes: any = [
   {
     id: 'Q',
     data: {
-      label: 'Node with Toolbar',
+      label: 'Imprisoned Node',
     },
     type: 'tools',
     position: { x: 50, y: 50 },
@@ -48,24 +53,29 @@ const graphNodes: any = [
   },
 ];
 
-const graphEdges = [
+const initialEdges: Edge[] = [
   { id: 'e1-2', source: '1', target: '2' },
   { id: 'e2-3', source: '2', target: '3' },
   { id: 'e3-4', source: '3', target: '4' },
   { id: 'e4-5', source: '4', target: '5' },
   { id: 'e5-Z', source: '5', target: 'Z' },
   { id: 'eZ-1', source: 'Z', target: '1' },
-  { id: 'e1-Q', source: '1', target: 'Q' },
-  { id: 'eQ-5', source: 'Q', target: '5' },
+  { id: 'e1-Q', source: '1', target: 'Q', animated: true },
+  { id: 'eQ-5', source: 'Q', target: '5', animated: true },
 ];
 
 export default function SandboxReactFlow() {
+  const [ nodes, setNodes, onNodesChange ] = useNodesState(initialNodes);
+  const [ edges, setEdges, onEdgesChange ] = useEdgesState(initialEdges);
 
   return (
-    <div style={{ width: '98vw', height: '80vh' }}>
+    <div style={{ width: '1000px', height: '800px', border: '1px solid black' }}>
       <ReactFlow
-        nodes={graphNodes}
-        edges={graphEdges}
+        nodes={nodes}
+        edges={edges}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        fitView
       >
         <Controls />
         <MiniMap />
