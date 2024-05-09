@@ -25,12 +25,12 @@ export const initialNodes: Node[] = [
     resource: 'express.com',
     duration: 5
   }, type: 'topicNode' },
-  { id: '4', position: { x: 300, y: 400 }, data: {
+  { id: '4', position: { x: -150, y: 200 }, data: {
     id: '4',
     topic: 'Mongoose',
     resource: 'mongoose.net',
     duration: 2
-  }, type: 'topicNode' },
+  }, type: 'topicNode', parentId: '3' },
 ];
 
 

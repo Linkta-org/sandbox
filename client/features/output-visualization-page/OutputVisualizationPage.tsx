@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import SandboxReactFlow from './components/sandboxReactFlow';
-import DialogDemo from './components/sandboxNodeDialog';
+import NodeDialog from './components/sandboxNodeDialog';
 
 const OutputVisualizationPage = () => {
+
+  const [ formData, setFormData ] = useState(undefined);
+
   return (
     <>
       <div>OutputVisualizationPage Placeholder</div>
-      <DialogDemo></DialogDemo>
+      <div>{ formData }</div>
+      <NodeDialog setFormData={ setFormData }></NodeDialog>
       <SandboxReactFlow></SandboxReactFlow>
     </>
   )

@@ -20,19 +20,18 @@ const nodeTypes = {
   topicNode: TopicNode
 }
 
-
-
-
 export default function SandboxReactFlow() {
+
   const [ nodes, setNodes, onNodesChange ] = useNodesState(initialNodes);
   const [ edges, setEdges, onEdgesChange ] = useEdgesState(initialEdges);
+
   const onConnect = useCallback((connection: Connection) => {
     const edge = { ...connection, animated: true, id: `${edges.length} + 1`};
     setEdges(previousEdges => addEdge(edge, previousEdges))
   }, [])
 
   return (
-    <div style={{ width: '1000px', height: '800px', border: '1px solid black' }}>
+    <div style={{ width: '1000px', height: '65vh', border: '1px solid black' }}>
       <ReactFlow
         nodes={nodes}
         edges={edges}
