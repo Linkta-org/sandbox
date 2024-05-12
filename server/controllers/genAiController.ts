@@ -4,12 +4,16 @@ import TreePrompts from '@/server/models/TreePromptsModel';
 import { isType } from '@server/utils/typeChecker';
 import { AIProvider } from '@server/types/index';
 
+import { LinktaFlow, UserInput, User } from '@/server/models/Schemas';
+
 import type { Request, Response, NextFunction } from 'express';
 import type {
   GenerativeAIModel,
   ChainOfThought,
   TreePromptsFunction,
 } from '@server/types/index';
+
+const dummyUserId = '663d2cd5b573a748b7f66e85';
 
 class GenAIController {
   AI: AIProvider;
@@ -47,7 +51,6 @@ class GenAIController {
       const response = await AIConnection.generateResponse(prompt);
 
       res.locals.response = response;
-
       return next();
     } catch (err: unknown) {
       const methodError = createError(
@@ -75,15 +78,35 @@ class GenAIController {
     next: NextFunction
   ): Promise<void> {
     const userPrompt = req.body.prompt;
-
+    //create userinput doc and return document id, then pass into linktaflow doc creation process
+    const userInputId = await UserInput.create({ input: userPrompt });
     try {
       const response = await this.queryTree(userPrompt);
 
-      // Here we will need to parse the response and build the tree
-      // with something more meaningful, like res.locals.tree
+      //store LLM generated response into linktaflows collection in DB
+      const parsedResponse = JSON.parse(response);
 
-      res.locals.tree = response;
+      const { nodes, edges } = parsedResponse;
+      console.log('parsedRes...', parsedResponse);
 
+      const linktaFlowData = {
+        nodes: nodes,
+        edges: edges,
+        userInputId: userInputId._id.toString(),
+        userId: dummyUserId,
+      };
+      console.log('linktaflowdata: ->', linktaFlowData);
+
+      const linktaFlowId = await LinktaFlow.create(linktaFlowData);
+      const treeId = linktaFlowId._id.toString();
+      
+      //once linktaFlow doc is successfully added to DB, update linktaflowId to user's linktaflows[] property
+      await User.findByIdAndUpdate(dummyUserId, {
+        $push: { linktaFlows: treeId },
+      }); //need to be tested
+      res.locals.tree = response; //send respsonse - {nodes: [{}], edges: [{}]} in JSON format
+      //send linktaflow doc/tree Id back to front end
+      res.locals.treeId = treeId;
       return next();
     } catch (err: unknown) {
       const methodError = createError(

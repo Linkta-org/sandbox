@@ -1,19 +1,29 @@
-import React, { useState } from 'react';
-import SandboxReactFlow from '../sandbox/components/sandboxReactFlow';
-import NodeDialog from '../sandbox/components/sandboxNodeDialog';
+import React from 'react';
+import TreeVisualizationBox from './components/TreeVisualizationBox';
+import useStore from '@/client/stores/nodeMindMapStore';
+import { useMutation } from '@tanstack/react-query';
+import axios from 'axios';
 
 const OutputVisualizationPage = () => {
-
-  const [ formData, setFormData ] = useState(undefined);
+  const saveFlowStateMutation = useMutation({
+    mutationFn: () => {
+      const { nodes, edges, treeId } = useStore.getState();
+      return axios.post(`http://localhost:3000/api/trees/${treeId}`, { nodes, edges });
+    },
+  });
 
   return (
-    <>
-      <div>OutputVisualizationPage Placeholder</div>
-      <div>{ formData }</div>
-      <NodeDialog setFormData={ setFormData }></NodeDialog>
-      <SandboxReactFlow></SandboxReactFlow>
-    </>
-  )
+    <div>
+      <h1>Hello World</h1>
+      <button
+        onClick={() => saveFlowStateMutation.mutate()}
+        className="rounded-md border-2 border-blue-700 bg-blue-300 p-2"
+      >
+        Save your progress
+      </button>
+      <TreeVisualizationBox />
+    </div>
+  );
 };
 
 export default OutputVisualizationPage;

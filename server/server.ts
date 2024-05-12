@@ -1,14 +1,24 @@
 import express from 'express';
-import { getEnv } from '@server/utils/environment';
-import genAI from '@server/routes/genAi';
-import { globalErrorHandler } from '@server/middleware/errorHandling';
+import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
-
+import { getEnv } from '@server/utils/environment';
+import { globalErrorHandler } from '@server/middleware/errorHandling';
+import { MongoClient, ServerApiVersion } from 'mongodb';
 import type { Express, Request, Response } from 'express';
 import type { Server } from 'http';
+import genAI from '@server/routes/genAi';
+import { LinktaFlowRouter } from './routes/linktaFlowRouter';
+import cors from 'cors';
+
+const corsOptions = {
+  origin: 'http://localhost:5173',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
 
 getEnv();
-
+const uri = process.env.MONGO_DB_URI;
+mongoose.set('strictQuery', false);
 /**
  * Start the server.
  */
@@ -16,9 +26,15 @@ function startServer() {
   const app: Express = express();
   const PORT = process.env.PORT || 3000;
 
-  connectToDatabase();
+  if (!uri) {
+    throw new Error('Missing DB connection string!');
+  }
+
+  connectToDatabase(uri).catch(console.dir);
 
   app.use(bodyParser.json());
+
+  app.use(cors(corsOptions));
 
   /**
    * Test route for the server. This should direct to the frontend.
@@ -31,6 +47,8 @@ function startServer() {
    * Routes.
    */
   app.use('/gen-ai', genAI);
+
+  app.use('/api/trees', LinktaFlowRouter);
 
   /**
    * Default route for unknown routes. This should be the last route.
@@ -84,8 +102,31 @@ function stopServer(server: Server) {
  *
  * This should return the connection so that stopServer can use it to disconnect.
  */
-function connectToDatabase() {
+
+async function connectToDatabase(link: string) {
   // connect to the database
+  const client = new MongoClient(link, {
+    serverApi: {
+      version: ServerApiVersion.v1,
+      strict: true,
+      deprecationErrors: true,
+    },
+  });
+
+  try {
+    // Connect the client to the server	(optional starting in v4.7)
+    await client.connect();
+    // Send a ping to confirm a successful connection
+    await client.db('admin').command({ ping: 1 });
+    console.log(
+      'Pinged your deployment. You successfully connected to MongoDB!'
+    );
+    await mongoose.connect(uri ?? '')
+      .then(() => console.log('MONGOOSE connected!'))
+  } finally {
+    // Ensures that the client will close when you finish/error
+    await client.close();
+  }
 }
 
 /**
