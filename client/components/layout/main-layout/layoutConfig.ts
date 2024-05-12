@@ -10,6 +10,7 @@ const buildTreePageRouteTab: Tab = {
   path: '/generate',
 };
 const visualizePageRouteTab: Tab = { tabname: 'Visualize', path: '/output' };
+const sandboxPageRouteTab: Tab = { tabname: 'Sandbox', path: '/sandbox' };
 const cookiePreferencesPageRouteTab: Tab = {
   tabname: 'Cookie Preferences',
   path: '/cookie_preferences',
@@ -23,7 +24,7 @@ const privacyPageRouteTab: Tab = { tabname: 'Privacy', path: '/privacy' };
  */
 export const routeToNavTabsMapping: Record<string, Tab[]> = {
   '/': [signInPageRouteTab, signUpPageRouteTab, buildTreePageRouteTab],
-  '/generate': [homePageRouteTab, visualizePageRouteTab],
+  '/generate': [homePageRouteTab, visualizePageRouteTab, sandboxPageRouteTab],
   '/output': [homePageRouteTab, buildTreePageRouteTab],
 };
 /**

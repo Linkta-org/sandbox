@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import SandboxReactFlow from './components/sandboxReactFlow';
-import NodeDialog from './components/sandboxNodeDialog';
+import SandboxReactFlow from '../sandbox/components/sandboxReactFlow';
+import NodeDialog from '../sandbox/components/sandboxNodeDialog';
 
 const OutputVisualizationPage = () => {
 
