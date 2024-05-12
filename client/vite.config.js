@@ -2,7 +2,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import tsconfigPaths from 'vite-tsconfig-paths';
-import tailwindcss from 'tailwindcss';
+// import tailwindcss from 'tailwindcss';
 
 export default defineConfig({
   plugins: [
@@ -12,7 +12,7 @@ export default defineConfig({
   css: {
     postcss: {
       plugins: [
-        tailwindcss(path.resolve(__dirname, 'tailwind.config.js')),
+        // tailwindcss(path.resolve(__dirname, 'tailwind.config.js')),
         require('autoprefixer'),
       ],
     },
