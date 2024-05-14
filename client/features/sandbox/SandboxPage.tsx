@@ -2,14 +2,17 @@ import React, { useState } from 'react';
 import SandboxReactFlow from './components/sandboxReactFlow';
 import NodeDialog from './components/sandboxNodeDialog';
 
-const SandboxPage = () => {
+export interface CreateNodeData {
+  topic: string,
+  resource: string,
+  duration: number
+}
 
-  const [ formData, setFormData ] = useState(undefined);
+const SandboxPage = () => {
 
   return (
     <>
-      <div>{ formData }</div>
-      <NodeDialog setFormData={ setFormData }></NodeDialog>
+      <NodeDialog></NodeDialog>
       <SandboxReactFlow></SandboxReactFlow>
     </>
   )
