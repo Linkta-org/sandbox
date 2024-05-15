@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import useStore from '@/client/stores/nodeMindMapStore';
 
 interface PromptPayload {
   prompt: string;
@@ -21,6 +22,13 @@ const PromptInputForm = () => {
     },
     onSuccess: (data) => {
       console.log('Prompt sent successfully', data);
+      const parsedData = JSON.parse(data.response);
+      const nodes = parsedData.nodes;
+      const edges = parsedData.edges;
+      useStore.setState({
+        nodes: nodes,
+        edges: edges,
+      });
       navigate('/output');
     },
     onError: (error) => {
