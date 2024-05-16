@@ -12,7 +12,8 @@
     "ecmaFeatures": {
       "jsx": true
     },
-    "project": "./tsconfig.json"
+    "project": "./tsconfig.json",
+    "extraFileExtensions": [".html"]
   },
   "plugins": [
     "@typescript-eslint",
@@ -30,7 +31,7 @@
     "plugin:jsx-a11y/recommended",
     "plugin:react-hooks/recommended"
   ],
-  "ignorePatterns": ["node_modules/", "dist", "package*.json", "*.config.js"],
+  "ignorePatterns": ["node_modules/", "dist", "package*.json", "*.config.js", "*.html", "client/**/*.html"],
   "overrides": [
     {
       "files": ["*.js"],
