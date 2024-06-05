@@ -25,15 +25,23 @@ function dagreAutoLayout(
     dagreGraph.setEdge(edge.source, edge.target);
   });
 
+  //already spreaded out the nodes
   dagre.layout(dagreGraph);
 
   initialNodes.forEach((node) => {
     const nodeWithPosition = dagreGraph.node(node.id);
 
-    node.position = {
-      x: nodeWithPosition.x - nodeWidth / 2,
-      y: nodeWithPosition.y - nodeHeight / 2,
-    };
+    if (node.parentId) {
+      node.position = {
+        x: nodeWithPosition.x - nodeWidth / 2,
+        y: nodeWithPosition.y - nodeHeight / 2,
+      };
+    } else {
+      node.position = {
+        x: nodeWithPosition.x,
+        y: nodeWithPosition.y,
+      };
+    }
   });
 
   return { nodes: initialNodes, edges: initialEdges };
