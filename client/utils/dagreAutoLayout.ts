@@ -32,14 +32,19 @@ function dagreAutoLayout(
     const nodeWithPosition = dagreGraph.node(node.id);
 
     if (node.parentId) {
+      const parentNodeWithPosition = dagreGraph.node(node.parentId);
       node.position = {
-        x: nodeWithPosition.x - nodeWidth / 2,
-        y: nodeWithPosition.y - nodeHeight / 2,
+        x:
+          nodeWithPosition.x -
+          parentNodeWithPosition.x +
+          parentNodeWithPosition.width -
+          nodeWidth * 0.5,
+        y: nodeWithPosition.y - parentNodeWithPosition.y,
       };
     } else {
       node.position = {
-        x: nodeWithPosition.x,
-        y: nodeWithPosition.y,
+        x: nodeWithPosition.x - nodeWithPosition.width / 2,
+        y: nodeWithPosition.y - nodeWithPosition.height / 2,
       };
     }
   });
