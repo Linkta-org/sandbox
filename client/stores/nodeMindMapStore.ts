@@ -244,7 +244,7 @@ const initialEdges: Edge[] = [
 //   { id: 'e9-11', source: '9', target: '11', type: 'smoothstep' },
 // ];
 
-dagreAutoLayout(initialNodes, initialEdges, 150, 80);
+dagreAutoLayout(initialNodes, initialEdges);
 
 const useStore = createWithEqualityFn<RFState>((set, get) => ({
   treeId: '663bfa27e3b94f9783b2ffb3',

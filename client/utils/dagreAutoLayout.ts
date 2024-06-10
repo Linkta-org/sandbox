@@ -9,12 +9,10 @@ const setupDagreFlow = () => {
   return dagreFlow;
 };
 
-function dagreAutoLayout(
-  initialNodes: Node[],
-  initialEdges: Edge[],
-  nodeWidth: number,
-  nodeHeight: number
-) {
+const nodeWidth = 168;
+const nodeHeight = 44;
+
+function dagreAutoLayout(initialNodes: Node[], initialEdges: Edge[]) {
   const dagreGraph = setupDagreFlow();
 
   initialNodes.forEach((node) => {
@@ -38,7 +36,7 @@ function dagreAutoLayout(
           nodeWithPosition.x -
           parentNodeWithPosition.x +
           parentNodeWithPosition.width -
-          nodeWidth * 0.5,
+          nodeWidth * 0.5535,
         y: nodeWithPosition.y - parentNodeWithPosition.y,
       };
     } else {
